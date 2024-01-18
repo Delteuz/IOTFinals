@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\BulbStatus;
 use Illuminate\Http\Request;
+use App\Models\ScheduleLights;
 
-class BulbStatusController extends Controller
+
+class ScheduleLightsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,16 +36,15 @@ class BulbStatusController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show(ScheduleLights $scheduleLights)
     {
-        $status = BulbStatus::all();
-        return response()->json(['data' => $status], 200);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(ScheduleLights $scheduleLights)
     {
         //
     }
@@ -51,32 +52,25 @@ class BulbStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-
-        $pin1 = $request->input('pin1');
-        $pin2 = $request->input('pin2');
-        $pin3 = $request->input('pin3');
-        $pin4 = $request->input('pin4');
-
-        $id1 = 1;
-        $id2 = 2;
-        $id3 = 3;
-        $id4 = 4;
-
-        BulbStatus::where('id', $id1)->update(['status' => $pin1]);
-        BulbStatus::where('id', $id2)->update(['status' => $pin2]);
-        BulbStatus::where('id', $id3)->update(['status' => $pin3]);
-        BulbStatus::where('id', $id4)->update(['status' => $pin4]);
+        //dd($request->all());
+        $pin = ScheduleLights::find($id);
+        $pin->update($request->all());
 
         return redirect('/dashboard');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        //
+        $sched = ScheduleLights::find($id);
+        $sched->schedule = NULL;
+        $sched->save();
+
+        return redirect('/dashboard');
     }
 }

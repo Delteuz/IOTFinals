@@ -43,68 +43,181 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h1><strong> Select a date and time:</strong></h1>
-                    {{-- schedule start --}}
-                    <form id="scheduleForm">
-                        <label for="scheduleDateTime">Light 1: </label>
-                        <input type="datetime-local" id="scheduleDateTime" required />
+                    {{-- schedule start  1 --}}
+                    <form id="scheduleForm_1" method="POST" action="/setSched/1">
+                        @csrf
+                        <label style="margin-right: 20px;" for="scheduleDateTime1">Light 1: </label>
+                        <input type="datetime-local" id="scheduleDateTime1" name="schedule" required />
+
+                        <select style="margin: 20px; width: 15%;" name="setTo" id="sched{{ $led[0]->id }}">
+                            @if ($led[0]->status == 'ON')
+                                <option value="ON" selected>ON</option>
+                                <option value="OFF">OFF</option>
+                            @elseif($led[0]->status == 'OFF')
+                                <option value="OFF" selected>OFF</option>
+                                <option value="ON">ON</option>
+                            @endif
+
+                        </select>
 
                         <button
-                            style="margin-left: 20px; border: 1px solid black; border-radius: 100px; padding: 10px 20px;"
-                            type="button" onclick="scheduleTask()" id="scheduleButton" <!-- Add an ID for easy
-                            reference -->
-
+                            style="margin-left: 10px; border: 1px solid black; border-radius: 100px; padding: 10px 20px;"
+                            type="submit">
                             Set
                         </button>
                     </form>
 
-                    <div id="output"></div>
+                    <div id="scheduled_1">
+                        @if ($scheduler[0]->schedule != null)
+                            <span>Schedule: Turn <strong>{{ $scheduler[0]->setTo }}</strong> at
+                                <strong>{{ $scheduler[0]->schedule }}</strong></span>
+                            <form action="/delete-sched/1" method="POST">
+                                @csrf
+                                <button
+                                    style="color: red; margin-top: 10px; border: 1px solid red; border-radius: 100px; padding: 10px 40px;"
+                                    type="submit">Remove Schedule</button>
+                            </form>
+                            <br><br>
+                            <hr>
+                        @else
+                            <span>Schedule: None</span>
+                            <br><br>
+                            <hr>
+                        @endif
+                    </div>
 
-                    <script>
-                        function scheduleTask() {
-                            // Get the scheduled date and time from the form
-                            const scheduledDateTime = document.getElementById("scheduleDateTime").value;
+                    {{-- Schedule 2 --}}
+                    <form id="scheduleForm_2" method="POST" action="/setSched/2">
+                        @csrf
+                        <label style="margin-right: 20px;" for="scheduleDateTime2">Light 2: </label>
+                        <input type="datetime-local" id="scheduleDateTime2" name="schedule" required />
 
-                            // Check if the input is not empty before scheduling the task
-                            if (!scheduledDateTime) {
-                                alert("Please select a date and time.");
-                                return;
-                            }
+                        <select style="margin: 20px; width: 15%;" name="setTo" id="sched{{ $led[1]->id }}">
+                            @if ($led[1]->status == 'ON')
+                                <option value="ON" selected>ON</option>
+                                <option value="OFF">OFF</option>
+                            @elseif($led[1]->status == 'OFF')
+                                <option value="OFF" selected>OFF</option>
+                                <option value="ON">ON</option>
+                            @endif
 
-                            // Parse the date and time string
-                            const scheduledTime = new Date(scheduledDateTime).getTime();
+                        </select>
 
-                            // Get the current time
-                            const currentTime = new Date().getTime();
+                        <button
+                            style="margin-left: 10px; border: 1px solid black; border-radius: 100px; padding: 10px 20px;"
+                            type="submit">
+                            Set
+                        </button>
+                    </form>
 
-                            // Calculate the delay in milliseconds
-                            const delay = scheduledTime - currentTime;
+                    <div id="scheduled_2">
+                        @if ($scheduler[1]->schedule != null)
+                            <span>Schedule: Turn <strong>{{ $scheduler[1]->setTo }}</strong> at
+                                <strong>{{ $scheduler[1]->schedule }}</strong></span>
+                            <form action="/delete-sched/2" method="POST">
+                                @csrf
+                                <button
+                                    style="color: red; margin-top: 10px; border: 1px solid red; border-radius: 100px; padding: 10px 40px;"
+                                    type="submit">Remove Schedule</button>
+                            </form>
+                            <br><br>
+                            <hr>
+                        @else
+                            <span>Schedule: None</span>
+                            <br><br>
+                            <hr>
+                        @endif
+                    </div>
 
-                            // Clear any existing scheduled task
-                            clearTimeout(window.scheduledTask);
+                    {{-- Schedule 3 --}}
+                    <form id="scheduleForm_3" method="POST" action="/setSched/3">
+                        @csrf
+                        <label style="margin-right: 20px;" for="scheduleDateTime3">Light 3: </label>
+                        <input type="datetime-local" id="scheduleDateTime3" name="schedule" required />
 
-                            // Schedule the task to display "Hello, World!" after the specified delay
-                            window.scheduledTask = setTimeout(function() {
-                                displayHelloWorld();
-                            }, delay);
+                        <select style="margin: 20px; width: 15%;" name="setTo" id="sched{{ $led[2]->id }}">
+                            @if ($led[2]->status == 'ON')
+                                <option value="ON" selected>ON</option>
+                                <option value="OFF">OFF</option>
+                            @elseif($led[2]->status == 'OFF')
+                                <option value="OFF" selected>OFF</option>
+                                <option value="ON">ON</option>
+                            @endif
 
-                            // Provide feedback to the user
-                            document.getElementById("output").innerText = "Task scheduled!";
+                        </select>
 
-                            // Optionally, you can clear the form
-                            document.getElementById("scheduleForm").reset();
-                        }
+                        <button
+                            style="margin-left: 10px; border: 1px solid black; border-radius: 100px; padding: 10px 20px;"
+                            type="submit">
+                            Set
+                        </button>
+                    </form>
 
-                        function displayHelloWorld() {
-                            // Update the content on the page
-                            document.getElementById("output").innerText = "Hello, World!";
-                        }
+                    <div id="scheduled_3">
+                        @if ($scheduler[2]->schedule != null)
+                            <span>Schedule: Turn <strong>{{ $scheduler[2]->setTo }}</strong> at
+                                <strong>{{ $scheduler[2]->schedule }}</strong></span>
+                            <form action="/delete-sched/3" method="POST">
+                                @csrf
+                                <button
+                                    style="color: red; margin-top: 10px; border: 1px solid red; border-radius: 100px; padding: 10px 40px;"
+                                    type="submit">Remove Schedule</button>
+                            </form>
+                            <br><br>
+                            <hr>
+                        @else
+                            <span>Schedule: None</span>
+                            <br><br>
+                            <hr>
+                        @endif
+                    </div>
 
-                        // Add an event listener to the input to enable/disable the button dynamically
-                        document.getElementById("scheduleDateTime").addEventListener("input", function() {
-                            const scheduleButton = document.getElementById("scheduleButton");
-                            scheduleButton.disabled = !this.value; // Disable if the input is empty
-                        });
-                    </script>
+                    {{-- Schedule 4 --}}
+                    <form id="scheduleForm_4" method="POST" action="/setSched/4">
+                        @csrf
+                        <label style="margin-right: 20px;" for="scheduleDateTime4">Light 4: </label>
+                        <input type="datetime-local" id="scheduleDateTime4" name="schedule" required />
+
+                        <select style="margin: 20px; width: 15%;" name="setTo" id="sched{{ $led[3]->id }}">
+                            @if ($led[3]->status == 'ON')
+                                <option value="ON" selected>ON</option>
+                                <option value="OFF">OFF</option>
+                            @elseif($led[3]->status == 'OFF')
+                                <option value="OFF" selected>OFF</option>
+                                <option value="ON">ON</option>
+                            @endif
+
+                        </select>
+
+                        <button
+                            style="margin-left: 10px; border: 1px solid black; border-radius: 100px; padding: 10px 20px;"
+                            type="submit">
+                            Set
+                        </button>
+                    </form>
+
+                    <div id="scheduled_4">
+                        @if ($scheduler[3]->schedule != null)
+                            <span>Schedule: Turn <strong>{{ $scheduler[3]->setTo }}</strong> at
+                                <strong>{{ $scheduler[3]->schedule }}</strong></span>
+                            <form action="/delete-sched/4" method="POST">
+                                @csrf
+                                <button
+                                    style="color: red; margin-top: 10px; border: 1px solid red; border-radius: 100px; padding: 10px 40px;"
+                                    type="submit">Remove Schedule</button>
+                            </form>
+                            <br><br>
+                            <hr>
+                        @else
+                            <span>Schedule: None</span>
+                            <br><br>
+                            <hr>
+                        @endif
+                    </div>
+
+
+
+
 
                     {{-- schedule end --}}
                 </div>

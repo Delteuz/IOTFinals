@@ -1,9 +1,14 @@
 <?php
 
 use App\Models\BulbStatus;
+use App\Models\ScheduleLights;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BulbStatusController;
+use App\Http\Controllers\ScheduleLightsController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +22,16 @@ use App\Http\Controllers\BulbStatusController;
 */
 
 Route::get('/', function () {
+
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
     $led = BulbStatus::all();
-    return view('dashboard')->with('led', $led);
+    $scheduledLights = ScheduleLights::all();
+    return view('dashboard')
+        ->with('led', $led)
+        ->with('scheduler', $scheduledLights);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -36,3 +45,7 @@ require __DIR__ . '/auth.php';
 
 
 Route::post('/new', [BulbStatusController::class, 'update']);
+
+
+Route::post('/setSched/{id}', [ScheduleLightsController::class, 'update']);
+Route::post('/delete-sched/{id}', [ScheduleLightsController::class, 'destroy']);
