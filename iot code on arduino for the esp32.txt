@@ -1,0 +1,92 @@
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
+
+const char *ssid = "secret";
+const char *password = "secret";
+
+//mypins
+int pin1 = 23;
+int pin2 = 22;
+int pin3 = 19;
+int pin4 = 18;
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(pin1, OUTPUT);
+  pinMode(pin2, OUTPUT);
+  pinMode(pin3, OUTPUT);
+  pinMode(pin4, OUTPUT);
+
+  // Connect to Wi-Fi
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
+  Serial.println("Connected to WiFi");
+
+  // Start the loop
+  loop();
+}
+
+void loop() {
+  // Your server address
+  String serverAddress = "http://127.0.0.1:8000/api/show";
+
+  // Create an HTTP client
+  HTTPClient http;
+
+  // Begin the request
+  http.begin(serverAddress);
+
+  // Send the request
+  int httpCode = http.GET();
+
+  // Check for a successful response
+  if (httpCode > 0) {
+    // Handle the response
+    String payload = http.getString();
+
+    // Parse the JSON response
+    DynamicJsonDocument doc(1024);
+    DeserializationError error = deserializeJson(doc, payload);
+
+    if (error) {
+      Serial.print("JSON parsing failed: ");
+      Serial.println(error.c_str());
+    } else {
+      // Extract id and status from JSON
+      JsonArray data = doc["data"];
+      for (JsonObject obj : data) {
+        int id = obj["id"];
+        String status = obj["status"];
+        Serial.print("ID: ");
+        Serial.print(id);
+        Serial.print(", Status: ");
+        Serial.println(status);
+
+        // Set pin 22 or 23 based on the ID and status
+        if (id == 1) {
+          digitalWrite(pin1, status == "ON" ? HIGH : LOW);
+        } else if (id == 2) {
+          digitalWrite(pin2, status == "ON" ? HIGH : LOW);
+        }else if (id == 3) {
+          digitalWrite(pin3, status == "ON" ? HIGH : LOW);
+        }else if (id == 4) {
+          digitalWrite(pin4, status == "ON" ? HIGH : LOW);
+        }
+      }
+    }
+  } else {
+    // Handle the error
+    Serial.println("HTTP request failed");
+  }
+
+  // End the request
+  http.end();
+
+  // Wait for some time before the next request
+  delay(5000); // You can adjust this delay according to your needs
+}
