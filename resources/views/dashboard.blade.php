@@ -196,6 +196,111 @@
                         </button>
                     </form>
 
+                    <script>
+                        //Form 1 ------------------------------------------------------
+                        document.getElementById('scheduleForm_1').addEventListener('submit', function(e) {
+                            e.preventDefault(); // prevent the form from submitting normally
+
+                            var dateTimeInput = document.getElementById('scheduleDateTime1');
+                            var currentDate = new Date();
+                            var inputDate = new Date(dateTimeInput.value);
+
+                            var diffInMinutes = (inputDate - currentDate) / (60 * 1000); // convert milliseconds to minutes
+
+
+                            // Store the delay in the session
+                            sessionStorage.setItem('delay1', diffInMinutes);
+
+                            // Submit the form
+                            this.submit();
+                            //alert(diffInMinutes);
+                        });
+                        //Form 2 ------------------------------------------------------
+                        document.getElementById('scheduleForm_2').addEventListener('submit', function(e) {
+                            e.preventDefault(); // prevent the form from submitting normally
+
+                            var dateTimeInput = document.getElementById('scheduleDateTime2');
+                            var currentDate = new Date();
+                            var inputDate = new Date(dateTimeInput.value);
+
+                            var diffInMinutes = (inputDate - currentDate) / (60 * 1000); // convert milliseconds to minutes
+
+
+                            // Store the delay in the session
+                            sessionStorage.setItem('delay2', diffInMinutes);
+
+                            // Submit the form
+                            this.submit();
+                            //alert(diffInMinutes);
+                        });
+                        //Form 3 ------------------------------------------------------
+                        document.getElementById('scheduleForm_3').addEventListener('submit', function(e) {
+                            e.preventDefault(); // prevent the form from submitting normally
+
+                            var dateTimeInput = document.getElementById('scheduleDateTime3');
+                            var currentDate = new Date();
+                            var inputDate = new Date(dateTimeInput.value);
+
+                            var diffInMinutes = (inputDate - currentDate) / (60 * 1000); // convert milliseconds to minutes
+
+
+                            // Store the delay in the session
+                            sessionStorage.setItem('delay3', diffInMinutes);
+
+                            // Submit the form
+                            this.submit();
+                            //alert(diffInMinutes);
+                        });
+                        //Form 4 ------------------------------------------------------
+                        document.getElementById('scheduleForm_4').addEventListener('submit', function(e) {
+                            e.preventDefault(); // prevent the form from submitting normally
+
+                            var dateTimeInput = document.getElementById('scheduleDateTime4');
+                            var currentDate = new Date();
+                            var inputDate = new Date(dateTimeInput.value);
+
+                            var diffInMinutes = (inputDate - currentDate) / (60 * 1000); // convert milliseconds to minutes
+
+
+                            // Store the delay in the session
+                            sessionStorage.setItem('delay4', diffInMinutes);
+
+                            // Submit the form
+                            this.submit();
+                            //alert(diffInMinutes);
+                        });
+
+                        //set up timer
+                        window.onload = function() {
+                            var delays = ['delay1', 'delay2', 'delay3', 'delay4'];
+
+                            delays.forEach(function(delayKey) {
+                                var delay = sessionStorage.getItem(delayKey);
+
+                                if (delay !== null) {
+                                    // There is a delay item in the session storage
+                                    // Convert the delay from string back to number
+                                    delay = parseFloat(delay);
+                                    alert(delay);
+
+                                    // Create a timer that decreases every second
+                                    var timer = setInterval(function() {
+                                        delay -= 1 / 60; // decrease the delay by 1 second
+
+                                        // If the delay is 0 or negative, clear the interval and show an alert
+                                        if (delay <= 0) {
+                                            clearInterval(timer);
+                                            alert("Time's up!");
+                                            sessionStorage.removeItem(delayKey);
+                                        }
+                                    }, 1000); // 1000 milliseconds = 1 second
+                                }
+                            });
+                        };
+                    </script>
+
+
+
                     <div id="scheduled_4">
                         @if ($scheduler[3]->schedule != null)
                             <span>Schedule: Turn <strong>{{ $scheduler[3]->setTo }}</strong> at
@@ -214,8 +319,6 @@
                             <hr>
                         @endif
                     </div>
-
-
 
 
 
