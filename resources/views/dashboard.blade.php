@@ -281,7 +281,7 @@
                                     // There is a delay item in the session storage
                                     // Convert the delay from string back to number
                                     delay = parseFloat(delay);
-                                    alert(delay);
+                                    //alert(delay);
 
                                     // Create a timer that decreases every second
                                     var timer = setInterval(function() {
@@ -290,8 +290,9 @@
                                         // If the delay is 0 or negative, clear the interval and show an alert
                                         if (delay <= 0) {
                                             clearInterval(timer);
-                                            alert("Time's up!");
+                                            //alert("Time's up!");
                                             sessionStorage.removeItem(delayKey);
+                                            location.reload();
                                         }
                                     }, 1000); // 1000 milliseconds = 1 second
                                 }
